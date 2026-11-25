@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Feirinha</title>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&family=Unbounded:wght@600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<style>
+:root{--bg:#F6FAF4;--card:#fff;--ink:#1F3329;--mute:#5C6F64;--line:#D5E0D4;--acc:#FF7A1A;--accink:#2B1600;--brand:#1F7A4D;--ok:#1F7A4D;--okbg:#D8F0E1;--warn:#FFE3C4;--warnink:#7A3B00;color-scheme:light}
+*{box-sizing:border-box}html{padding-top:env(safe-area-inset-top,0)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.45 Figtree,system-ui,sans-serif}
+h1,h2,h3,.logo{font-family:Unbounded,Figtree,system-ui,sans-serif;margin:0;line-height:1.2;letter-spacing:-.02em;font-weight:700}
+#app{max-width:480px;margin:0 auto;padding:14px 14px calc(120px + env(safe-area-inset-bottom,0))}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+a{color:var(--brand)}
+.note{font-size:13px;color:var(--mute);margin:6px 0}
+.logo{font-size:17px}.top{padding:4px 0 10px}
+.awn{--c:var(--brand);height:70px;margin:-14px -14px 0;background:repeating-linear-gradient(90deg,var(--c) 0 28px,#F6FAF4 28px 56px);position:relative;margin-bottom:14px}
+.awn::after{content:"";position:absolute;left:0;right:0;top:100%;height:14px;background:radial-gradient(circle at 14px 0,var(--c) 14px,transparent 14.5px) 0 0/56px 14px,radial-gradient(circle at 42px 0,#F6FAF4 14px,transparent 14.5px) 0 0/56px 14px}
+.awn.big{height:96px}
+.hero{padding:22px 0 4px}.hero h1{font-size:30px;margin:14px 0 12px}.lead{font-size:17px;color:var(--mute);margin:0 0 20px}
+.steps{list-style:none;counter-reset:s;padding:0;margin:8px 0 16px}
+.steps li{counter-increment:s;position:relative;padding:10px 0 10px 46px;border-bottom:1px dotted var(--line)}
+.steps li::before{content:counter(s);position:absolute;left:0;top:10px;width:32px;height:32px;border-radius:50%;background:var(--acc);color:var(--accink);font:700 15px Unbounded,sans-serif;display:grid;place-items:center}
+.steps b,.steps small{display:block}.steps small{color:var(--mute)}
+.shop{font-size:26px;margin-top:10px}
+.row{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;margin-bottom:8px}
+.row .t{flex:1;min-width:0}.row b{display:block}.row small{color:var(--mute)}.blk{display:block}
+.it{padding:13px 0;border-bottom:1px dashed var(--line)}
+.it .l{display:flex;align-items:baseline;gap:8px}.it .l b{font-weight:700}
+.it .l i{flex:1;border-bottom:2px dotted var(--mute);opacity:.45;min-width:12px;transform:translateY(-4px)}
+.it .l span{font-weight:700;font-variant-numeric:tabular-nums}
+.it .s{display:flex;justify-content:flex-end;margin-top:8px}
+.com{background:var(--card);padding:14px;margin-bottom:14px;border-top:3px dashed var(--line);border-bottom:3px dashed var(--line)}
+.stats{display:flex;gap:12px;margin:0 0 14px}.stats div{flex:1;border-left:4px solid var(--acc);padding:2px 10px}
+.stats b{display:block;font:700 20px Unbounded,sans-serif}.stats small{color:var(--mute)}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:6px 0 10px;position:sticky;top:env(safe-area-inset-top,0);background:var(--bg);z-index:2}
+.tabs button{border:1.5px solid var(--ink);background:none;border-radius:999px;padding:7px 15px;white-space:nowrap;font-weight:600}
+.tabs button.on{background:var(--ink);color:var(--bg)}
+.step{display:flex;align-items:center;gap:10px}
+.step button{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--ink);background:none;font-size:19px;font-weight:700}
+.step button.add{background:var(--acc);border-color:var(--acc);color:var(--accink)}
+.step span{min-width:18px;text-align:center;font-weight:700}
+.bar{position:fixed;left:0;right:0;bottom:0;padding:10px 14px calc(10px + env(safe-area-inset-bottom,0));background:linear-gradient(transparent,var(--bg) 30%)}
+.bar>*{max-width:452px;margin:0 auto}
+.btn{display:flex;justify-content:space-between;align-items:center;gap:8px;width:100%;border:0;border-radius:999px;padding:15px 22px;background:var(--acc);color:var(--accink);font-weight:700;text-decoration:none;box-shadow:0 3px 0 rgba(0,0,0,.18)}
+.btn:active{transform:translateY(2px);box-shadow:none}
+.btn.ghost{background:transparent;border:1.5px solid var(--ink);color:var(--ink);box-shadow:none}
+.btn.sm{width:auto;display:inline-flex;padding:9px 16px;font-size:14px}
+label{display:block;font-size:14px;font-weight:700;margin:14px 0 4px}
+input,textarea{width:100%;font:inherit;color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:12px}
+.opts{display:flex;gap:8px}
+.opts button{flex:1;border:2px solid var(--line);background:var(--card);border-radius:14px;padding:12px;font-weight:700}
+.opts button.on{border-color:var(--brand);color:var(--brand)}
+.sum{display:flex;justify-content:space-between;padding:4px 0;color:var(--mute)}
+.sum.tot{color:var(--ink);font-weight:700;font-size:18px;border-top:2px dotted var(--line);margin-top:6px;padding-top:10px}
+.pill{display:inline-block;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:700;background:var(--warn);color:var(--warnink)}
+.pill.ok{background:var(--okbg);color:var(--ok)}
+.qr{display:flex;justify-content:center;margin:10px 0}.qr>div{background:#fff;padding:10px;border-radius:14px}
+.code{font:13px/1.3 ui-monospace,monospace;word-break:break-all;background:var(--card);border:1.5px dashed var(--line);border-radius:12px;padding:10px}
+.tl{list-style:none;margin:10px 0;padding:0}
+.tl li{display:flex;gap:10px;align-items:center;padding:8px 0;color:var(--mute)}
+.tl li i{width:18px;height:18px;border-radius:50%;border:2px solid var(--line);flex:none}
+.tl li.done{color:var(--ink)}.tl li.done i{background:var(--ok);border-color:var(--ok)}
+.tl li.now{color:var(--ink);font-weight:700}.tl li.now i{border-color:var(--acc);background:var(--acc)}
+.nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0)}
+.nav button{flex:1;border:0;background:none;padding:15px 4px;color:var(--mute);font-weight:700}
+.nav button.on{color:var(--ink);box-shadow:inset 0 3px 0 var(--brand)}
+.empty{text-align:center;color:var(--mute);padding:30px 10px}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.toast{position:fixed;top:calc(10px + env(safe-area-inset-top,0));left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:14px;z-index:9;max-width:90%}
+</style>
+</head>
+<body>
+<div id="app"><p class="empty">Carregando…</p></div>
+<script>
+const SB_URL='https://fyqmzkxuupiircinbuoa.supabase.co';
+const SB_KEY='sb_publishable_GBnq9NzlJgPgHD0L01ZjKA_HmtbfnKz';
+const db=supabase.createClient(SB_URL,SB_KEY);
+const $=s=>document.querySelector(s), v=id=>(document.getElementById(id)?.value||'').trim();
+const R=n=>Number(n).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const E=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const slugify=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40);
+const asc=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Za-z0-9 ]/g,'');
+const ST=['recebido','preparo','pronto','entregue'], STN={recebido:'Pedido recebido',preparo:'Em preparo',pronto:'Pronto',entregue:'Entregue'};
+let M='home',T='',C={cart:{},tipo:'retirada',forma:'pix',step:'menu',cat:null},L={tab:'ped',prods:[],orders:[],mode:'in'},V=null,timer=null;
+function say(t){T=t;render();setTimeout(()=>{T='';render()},2800)}
+function go(o,w){Object.assign(w||C,o);render();scrollTo(0,0)}
+
+/* ---------- Pix copia e cola (BR Code) ---------- */
+function crc(s){let c=0xFFFF;for(let i=0;i<s.length;i++){c^=s.charCodeAt(i)<<8;for(let j=0;j<8;j++)c=c&0x8000?((c<<1)^0x1021)&0xFFFF:(c<<1)&0xFFFF}return c.toString(16).toUpperCase().padStart(4,'0')}
+const F=(id,x)=>id+String(x.length).padStart(2,'0')+x;
+function pix(key,nome,val,tx){const p=F('00','01')+F('26',F('00','br.gov.bcb.pix')+F('01',key))+F('52','0000')+F('53','986')+F('54',Number(val).toFixed(2))+F('58','BR')+F('59',asc(nome).slice(0,25)||'LOJA')+F('60','BRASIL')+F('62',F('05',tx))+'6304';return p+crc(p)}
+
+/* ---------- ROTEAMENTO ---------- */
+async function boot(){
+ const q=new URLSearchParams(location.search),slug=q.get('loja'),tok=q.get('pedido');
+ if(slug){M='c';C.slug=slug;if(tok){C.token=tok;C.step='track'}
+  const{data}=await db.rpc('cardapio',{p_slug:slug});
+  if(!data){C.err='Loja não encontrada. Confira o link.'}else{C.loja=data;document.title=data.nome;C.cat=data.produtos[0]?.categoria}
+  render();if(tok)poll();return}
+ const{data}=await db.auth.getSession();
+ if(data.session){M='l';L.user=data.session.user;await loadPainel()}else render()}
+
+/* ---------- CLIENTE ---------- */
+const cnt=()=>Object.values(C.cart).reduce((a,b)=>a+b,0);
+const sub=()=>C.loja.produtos.reduce((a,p)=>a+(C.cart[p.id]||0)*p.preco,0);
+const tot=()=>sub()+(C.tipo==='entrega'?Number(C.loja.taxa_entrega):0);
+function qty(id,d){C.cart[id]=Math.max(0,(C.cart[id]||0)+d);render()}
+function cMenu(){const l=C.loja,cats=[...new Set(l.produtos.map(p=>p.categoria))];
+ return `<div class="awn" style="--c:${hue(C.slug)}"></div><h1 class="shop">${E(l.nome)}</h1><p class="note">${E(l.horario||'')}</p>
+ <div class="tabs">${cats.map(c=>`<button class="${c===C.cat?'on':''}" onclick="go({cat:'${E(c)}'})">${E(c)}</button>`).join('')}</div>
+ ${l.produtos.filter(p=>p.categoria===C.cat).map(p=>`<div class="it"><div class="l"><b>${E(p.nome)}</b><i></i><span>${R(p.preco)}</span></div><div class="s">${C.cart[p.id]?`<div class="step"><button aria-label="Tirar um" onclick="qty('${p.id}',-1)">−</button><span>${C.cart[p.id]}</span><button class="add" aria-label="Adicionar mais um" onclick="qty('${p.id}',1)">+</button></div>`:`<button class="btn ghost sm" onclick="qty('${p.id}',1)">Adicionar</button>`}</div></div>`).join('')||'<p class="empty">Nenhum produto disponível.</p>'}
+ <p class="note" style="text-align:center;margin-top:28px">Loja criada na <a href="./">feirinha</a></p>
+ ${cnt()?`<div class="bar"><button class="btn" onclick="go({step:'cart'})"><span>Ver sacola (${cnt()})</span><span>${R(sub())}</span></button></div>`:''}`}
+function cCart(){const l=C.loja;
+ return `<button class="btn ghost sm" onclick="go({step:'menu'})">Voltar ao cardápio</button><h2 style="margin:14px 0 8px">Seu pedido</h2>
+ ${l.produtos.filter(p=>C.cart[p.id]).map(p=>`<div class="row"><div class="t"><b>${E(p.nome)}</b><small>${R(p.preco)} cada</small></div><div class="step"><button onclick="qty('${p.id}',-1)" aria-label="Tirar um">−</button><span>${C.cart[p.id]}</span><button class="add" onclick="qty('${p.id}',1)" aria-label="Adicionar">+</button></div></div>`).join('')||'<p class="empty">Carrinho vazio.</p>'}
+ <label>Como quer receber?</label><div class="opts"><button class="${C.tipo==='retirada'?'on':''}" onclick="go({tipo:'retirada'})">Retirada</button><button class="${C.tipo==='entrega'?'on':''}" onclick="go({tipo:'entrega'})">Entrega (+${R(l.taxa_entrega)})</button></div>
+ ${C.tipo==='entrega'?`<label for="end">Endereço de entrega</label><input id="end" value="${E(C.end||'')}" oninput="C.end=this.value" autocomplete="street-address">`:''}
+ <label for="nome">Seu nome</label><input id="nome" value="${E(C.nome||'')}" oninput="C.nome=this.value" autocomplete="name">
+ <label for="tel">Telefone</label><input id="tel" value="${E(C.tel||'')}" oninput="C.tel=this.value" inputmode="tel" placeholder="(27) 99999-0000">
+ <label for="obs">Observações</label><textarea id="obs" rows="2" oninput="C.obs=this.value">${E(C.obs||'')}</textarea>
+ <label>Pagamento</label><div class="opts"><button class="${C.forma==='pix'?'on':''}" onclick="go({forma:'pix'})">Pix</button>${l.link_cartao?`<button class="${C.forma==='cartao'?'on':''}" onclick="go({forma:'cartao'})">Cartão</button>`:''}</div>
+ <div style="margin-top:14px"><div class="sum"><span>Itens</span><span>${R(sub())}</span></div>${C.tipo==='entrega'?`<div class="sum"><span>Entrega</span><span>${R(l.taxa_entrega)}</span></div>`:''}<div class="sum tot"><span>Total</span><span>${R(tot())}</span></div></div>
+ ${cnt()?`<div class="bar"><button class="btn" onclick="pedir()"><span>Fazer pedido</span><span>${R(tot())}</span></button></div>`:''}`}
+async function pedir(){
+ if((C.nome||'').trim().length<2||(C.tel||'').replace(/\D/g,'').length<8)return say('Informe seu nome e telefone.');
+ if(C.tipo==='entrega'&&!(C.end||'').trim())return say('Informe o endereço de entrega.');
+ const itens=Object.entries(C.cart).filter(([,q])=>q>0).map(([id,q])=>({produto_id:id,quantidade:q}));
+ const{data,error}=await db.rpc('criar_pedido',{p_slug:C.slug,p_nome:C.nome.trim(),p_telefone:C.tel.trim(),p_tipo:C.tipo,p_endereco:C.tipo==='entrega'?C.end.trim():null,p_forma:C.forma,p_obs:(C.obs||'').trim()||null,p_itens:itens});
+ if(error)return say('Não foi possível enviar: '+error.message);
+ C.token=data[0].o_token;C.cart={};history.replaceState(null,'','?loja='+C.slug+'&pedido='+C.token);go({step:'track'});poll()}
+async function poll(){clearInterval(timer);const f=async()=>{const{data}=await db.rpc('ver_pedido',{p_token:C.token});if(data){V=data;if(C.step==='track')render()}};await f();timer=setInterval(f,8000)}
+function cTrack(){if(!V)return '<p class="empty">Carregando pedido…</p>';const l=C.loja,i=ST.indexOf(V.status);
+ return `<h2>Pedido #${V.numero}</h2><p class="note">${R(V.total)} · ${V.forma_pagamento==='pix'?'Pix':'Cartão'}</p>
+ <div class="row"><div class="t"><b>Pagamento</b><small>${V.pago?'Confirmado pela loja':'Aguardando confirmação'}</small></div><span class="pill ${V.pago?'ok':''}">${V.pago?'Pago':'Pendente'}</span></div>
+ ${!V.pago&&V.forma_pagamento==='pix'&&l.chave_pix?(()=>{const code=pix(l.chave_pix,l.nome,V.total,'PED'+V.numero);return `<div class="qr"><div id="qr" data-t="${E(code)}"></div></div><div class="code" id="cc">${E(code)}</div><div class="acts"><button class="btn ghost sm" onclick="navigator.clipboard&&navigator.clipboard.writeText(document.getElementById('cc').textContent);say('Código Pix copiado')">Copiar código Pix</button></div><p class="note">Pague no app do seu banco. Quando a loja ver o Pix, o status muda para pago.</p>`})():''}
+ ${!V.pago&&V.forma_pagamento==='cartao'&&l.link_cartao?`<div class="acts"><a class="btn sm" target="_blank" rel="noopener" href="${E(l.link_cartao)}">Pagar com cartão</a></div>`:''}
+ <ul class="tl">${ST.map((s,k)=>`<li class="${k<i?'done':k===i?'now':''}"><i></i>${STN[s]}</li>`).join('')}</ul>
+ <p class="note">Esta página atualiza sozinha. Guarde este link para acompanhar.</p>`}
+function client(){if(C.err)return `<p class="empty">${E(C.err)}</p>`;if(!C.loja)return '<p class="empty">Carregando…</p>';return {menu:cMenu,cart:cCart,track:cTrack}[C.step]()}
+
+/* ---------- LOJISTA ---------- */
+function home(){return `<div class="awn big" style="--c:var(--acc)"></div><div class="hero"><p class="logo">feirinha</p><h1>Sua barraquinha na internet.</h1><p class="lead">Monte o cardápio, receba pedidos e cobre no Pix, tudo num link só. Sem comissão sobre as vendas.</p>
+ <div class="acts" style="flex-direction:column"><button class="btn" onclick="M='l';render()"><span>Abrir minha feirinha</span></button><a class="btn ghost" href="?loja=cozinha-da-lu"><span>Ver uma loja de exemplo</span></a></div></div>
+ <h2 style="font-size:17px;margin:28px 0 4px">Como funciona</h2><ol class="steps"><li><b>Cadastre seus produtos</b><small>Nome, preço e categoria. Leva uns 2 minutos.</small></li><li><b>Compartilhe seu link</b><small>Na bio do Instagram, no status e no WhatsApp.</small></li><li><b>Receba o pedido e o Pix</b><small>O cliente paga direto na sua conta.</small></li></ol>
+ <p class="note">Cliente? Use o link que a loja te enviou.</p>`}
+function auth(){return `<button class="btn ghost sm" onclick="M='home';render()">Voltar</button><h2 style="margin:14px 0 4px">${L.mode==='in'?'Entrar':'Criar conta'}</h2>
+ <label for="em">E-mail</label><input id="em" type="email" autocomplete="email"><label for="pw">Senha (mínimo 6 caracteres)</label><input id="pw" type="password" autocomplete="${L.mode==='in'?'current-password':'new-password'}">
+ <div class="acts"><button class="btn sm" onclick="entrar()">${L.mode==='in'?'Entrar':'Criar conta'}</button><button class="btn ghost sm" onclick="L.mode=L.mode==='in'?'up':'in';render()">${L.mode==='in'?'Não tenho conta':'Já tenho conta'}</button></div>`}
+async function entrar(){const email=v('em'),password=v('pw');if(!email||password.length<6)return say('Informe e-mail e senha de 6+ caracteres.');
+ const r=L.mode==='in'?await db.auth.signInWithPassword({email,password}):await db.auth.signUp({email,password});
+ if(r.error)return say(r.error.message==='Invalid login credentials'?'E-mail ou senha incorretos.':r.error.message);
+ if(!r.data.session)return say('Conta criada. Confirme pelo e-mail e depois entre.');
+ L.user=r.data.session.user;await loadPainel()}
+async function loadPainel(){const{data:lj}=await db.from('lojistas').select('*').eq('dono_id',L.user.id).maybeSingle();L.loja=lj;
+ if(lj){await Promise.all([loadProds(),loadOrders()]);db.channel('ped').on('postgres_changes',{event:'INSERT',schema:'public',table:'pedidos',filter:'lojista_id=eq.'+lj.id},async()=>{await loadOrders();beep();say('Novo pedido!')}).subscribe()}
+ render()}
+async function loadProds(){const{data}=await db.from('produtos').select('*').eq('lojista_id',L.loja.id).order('categoria').order('nome');L.prods=data||[]}
+async function loadOrders(){const{data}=await db.from('pedidos').select('*, itens_pedido(*)').eq('lojista_id',L.loja.id).order('criado_em',{ascending:false}).limit(50);L.orders=data||[]}
+function criar(){return `<h2 style="margin:6px 0">Crie sua loja</h2><p class="note">Você pode mudar tudo depois.</p>
+ <label for="ln">Nome da loja</label><input id="ln"><label for="lk">Chave Pix (CPF, e-mail, telefone ou aleatória)</label><input id="lk"><label for="lt">Taxa de entrega (R$)</label><input id="lt" type="number" min="0" value="0"><label for="lh">Horário</label><input id="lh" placeholder="Seg a sáb, 10h às 20h">
+ <div class="acts"><button class="btn sm" onclick="salvarLoja(true)">Criar loja</button></div>`}
+async function salvarLoja(novo){const nome=v('ln');if(nome.length<2)return say('Informe o nome da loja.');
+ const d={nome,chave_pix:v('lk')||null,taxa_entrega:+v('lt')||0,horario:v('lh')||null,link_cartao:novo?null:(v('lc')||null)};
+ if(!novo){const{error}=await db.from('lojistas').update(d).eq('id',L.loja.id);if(error)return say(error.message);Object.assign(L.loja,d);return say('Salvo.')}
+ let base=slugify(nome);if(base.length<3)base='loja-'+base;
+ for(let i=0;i<4;i++){const slug=i?base.slice(0,35)+'-'+Math.random().toString(36).slice(2,5):base;
+  const{data,error}=await db.from('lojistas').insert({...d,dono_id:L.user.id,slug}).select().single();
+  if(!error){L.loja=data;L.prods=[];L.orders=[];L.tab='prod';return render()}
+  if(error.code!=='23505')return say(error.message)}
+ say('Não foi possível gerar o link. Tente outro nome.')}
+const link=()=>location.origin+location.pathname+'?loja='+L.loja.slug;
+function painel(){if(!L.user)return auth();if(!L.loja)return criar();const t=L.tab;let b='';
+ if(t==='ped')b=stats()+(L.orders.length?L.orders.map(o=>{const i=ST.indexOf(o.status),nx=ST[i+1];return `<div class="com"><div style="display:flex;justify-content:space-between;gap:8px"><b>#${o.numero} · ${E(o.cliente_nome)}</b><span class="pill ${o.pago?'ok':''}">${o.pago?'Pago':'A conferir'}</span></div>
+ <small style="color:var(--mute)">${new Date(o.criado_em).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})} · ${o.tipo_entrega==='entrega'?'Entrega: '+E(o.endereco):'Retirada'} · ${o.forma_pagamento==='pix'?'Pix':'Cartão'} · ${R(o.total)}</small>
+ <ul style="margin:8px 0;padding-left:18px">${o.itens_pedido.map(x=>`<li>${x.quantidade}× ${E(x.nome)}</li>`).join('')}</ul>${o.observacao?`<small>Obs.: ${E(o.observacao)}</small>`:''}
+ <div class="acts">${o.pago?'':`<button class="btn sm" onclick="upd('${o.id}',{pago:true})">Marcar como pago</button>`}${nx?`<button class="btn ghost sm" onclick="upd('${o.id}',{status:'${nx}'})">${STN[nx]}</button>`:'<span class="pill ok">Entregue</span>'}<a class="btn ghost sm" target="_blank" rel="noopener" href="https://wa.me/55${o.cliente_telefone.replace(/\D/g,'')}?text=${encodeURIComponent('Oi, '+o.cliente_nome+'! Seu pedido #'+o.numero+' está: '+STN[o.status].toLowerCase()+'.')}">Chamar cliente</a></div></div>`}).join(''):'<p class="empty">Nenhum pedido ainda. Compartilhe o link da sua loja.</p>');
+ if(t==='prod')b=`<div class="row blk"><b>Novo produto</b><label for="pn">Nome</label><input id="pn"><label for="pp">Preço (R$)</label><input id="pp" type="number" step="0.01" min="0" inputmode="decimal"><label for="pc">Categoria</label><input id="pc" placeholder="Ex.: Marmitas"><div class="acts"><button class="btn sm" onclick="addProd()">Adicionar produto</button></div></div>`+L.prods.map(p=>`<div class="row" style="${p.ativo?'':'opacity:.55'}"><div class="t"><b>${E(p.nome)}</b><small>${E(p.categoria)} · ${R(p.preco)}</small></div><button class="btn ghost sm" onclick="togProd('${p.id}',${!p.ativo})">${p.ativo?'Pausar':'Voltar'}</button><button class="btn ghost sm" aria-label="Excluir" onclick="delProd('${p.id}')">Excluir</button></div>`).join('');
+ if(t==='cfg')b=`<div class="row blk"><b>Link da sua loja</b><div class="code" id="lk2">${E(link())}</div><div class="acts"><button class="btn sm" onclick="navigator.clipboard&&navigator.clipboard.writeText(document.getElementById('lk2').textContent);say('Link copiado')">Copiar link</button><a class="btn ghost sm" target="_blank" rel="noopener" href="${E(link())}">Abrir</a></div></div>
+ <label for="ln">Nome da loja</label><input id="ln" value="${E(L.loja.nome)}"><label for="lk">Chave Pix</label><input id="lk" value="${E(L.loja.chave_pix||'')}"><label for="lt">Taxa de entrega (R$)</label><input id="lt" type="number" min="0" value="${L.loja.taxa_entrega}"><label for="lh">Horário</label><input id="lh" value="${E(L.loja.horario||'')}"><label for="lc">Link de pagamento por cartão (opcional)</label><input id="lc" value="${E(L.loja.link_cartao||'')}" placeholder="https://…">
+ <div class="acts"><button class="btn sm" onclick="salvarLoja(false)">Salvar</button><button class="btn ghost sm" onclick="db.auth.signOut().then(()=>{L={tab:'ped',prods:[],orders:[],mode:'in'};render()})">Sair</button></div>`;
+ const tabs=[['ped','Pedidos'],['prod','Produtos'],['cfg','Minha loja']];
+ return `<div class="top"><span class="logo">feirinha</span></div><h2 style="margin:4px 0 14px;font-size:20px">${E(L.loja.nome)}</h2>${b}<nav class="nav">${tabs.map(([k,n])=>`<button class="${k===t?'on':''}" onclick="go({tab:'${k}'},L)">${n}</button>`).join('')}</nav>`}
+async function upd(id,d){const{error}=await db.from('pedidos').update(d).eq('id',id);if(error)return say(error.message);await loadOrders();render()}
+async function addProd(){const nome=v('pn'),preco=+v('pp'),categoria=v('pc')||'Geral';if(nome.length<2||!(preco>=0)||v('pp')==='')return say('Informe nome e preço.');
+ const{error}=await db.from('produtos').insert({lojista_id:L.loja.id,nome,preco,categoria});if(error)return say(error.message);await loadProds();say('Produto adicionado.')}
+async function togProd(id,ativo){await db.from('produtos').update({ativo}).eq('id',id);await loadProds();render()}
+async function delProd(id){if(!confirm('Excluir este produto?'))return;await db.from('produtos').delete().eq('id',id);await loadProds();render()}
+
+const AWC=['#F26B1D','#D94A3D','#2E9E6B','#E8A317','#D9567F'];
+const hue=s=>{let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))%5;return AWC[h]};
+function beep(){try{const a=new AudioContext(),o=a.createOscillator();o.connect(a.destination);o.frequency.value=880;o.start();o.stop(a.currentTime+.18)}catch(e){}}
+function stats(){const d=new Date().toDateString(),h=L.orders.filter(o=>o.status!=='cancelado'&&new Date(o.criado_em).toDateString()===d);return `<div class="stats"><div><b>${h.length}</b><small>pedidos hoje</small></div><div><b>${R(h.reduce((a,o)=>a+Number(o.total),0))}</b><small>vendido hoje</small></div></div>`}
+function render(){const a=$('#app');a.innerHTML=(M==='home'?home():M==='c'?client():painel())+(T?`<div class="toast" role="status">${E(T)}</div>`:'');
+ const q=document.getElementById('qr');if(q&&!q.firstChild&&window.QRCode)new QRCode(q,{text:q.dataset.t,width:176,height:176})}
+boot();
+</script>
+</body>
+</html>
